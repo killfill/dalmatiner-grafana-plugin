@@ -1,0 +1,17 @@
+{
+  "pluginType": "datasource",
+  "name": "DalmatinerDB",
+
+  "type": "dalmatinerdb",
+  "serviceName": "DalmatinerDatasource",
+
+  "module": "app/plugins/datasource/dalmatinerdb/datasource",
+
+  "partials": {
+    "config": "app/plugins/datasource/dalmatinerdb/partials/config.html"
+  },
+
+  "defaultMatchFormat": "regex values",
+  "metrics": true,
+  "annotations": false
+}

@@ -1,0 +1,83 @@
+<style>
+	.metric-min-width > a{
+		min-width: 350px;
+	}
+</style>
+<div class="tight-form">
+	<ul class="tight-form-list pull-right">
+		<li ng-show="parserError" class="tight-form-item">
+			<a bs-tooltip="parserError" style="color: rgb(229, 189, 28)" role="menuitem">
+				<i class="fa fa-warning"></i>
+			</a>
+		</li>
+		<li class="tight-form-item small" ng-show="target.datasource">
+			<em>{{target.datasource}}</em>
+		</li>
+		<li class="tight-form-item">
+			<div class="dropdown">
+				<a class="pointer dropdown-toggle" data-toggle="dropdown" tabindex="1">
+					<i class="fa fa-bars"></i>
+				</a>
+				<ul class="dropdown-menu pull-right" role="menu">
+					<li role="menuitem">
+						<a tabindex="1" ng-click="toggleQueryMode()">
+							Switch editor mode
+						</a>
+					</li>
+					<li role="menuitem">
+						<a tabindex="1" ng-click="duplicateDataQuery(target)">Duplicate</a>
+					</li>
+					<li role="menuitem">
+						<a tabindex="1" ng-click="moveDataQuery($index, $index-1)">Move up</a>
+					</li>
+					<li role="menuitem">
+						<a tabindex="1" ng-click="moveDataQuery($index, $index+1)">Move down</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li class="tight-form-item last">
+			<a class="pointer" tabindex="1" ng-click="removeDataQuery(target)">
+				<i class="fa fa-remove"></i>
+			</a>
+		</li>
+	</ul>
+
+	<ul class="tight-form-list">
+		<li class="tight-form-item" style="min-width: 15px; text-align: center">
+			{{target.refId}}
+		</li>
+		<li>
+			<a class="tight-form-item" ng-click="target.hide = !target.hide; get_data();" role="menuitem">
+				<i class="fa fa-eye"></i>
+			</a>
+		</li>
+	</ul>
+
+	<input type="text" class="tight-form-clear-input span10" ng-model="target.query" give-focus="target.rawQuery" spellcheck='false' ng-model-onblur ng-change="get_data()" ng-show="target.rawQuery"></input>
+
+	<ul class="tight-form-list" role="menu" ng-hide="target.rawQuery">
+		<li>
+			<metric-segment segment="bucketSegment" get-options="getBuckets()" on-change="bucketChanged()"></metric-segment>
+		</li>
+		<li ng-if='target.bucket'>
+			<metric-segment segment="metricSegment" get-options="getMetrics()" on-change="metricChanged()" style='min-width: 350px;' class='metric-min-width'></metric-segment>
+		</li>
+		<li class="dropdown" ng-repeat="aggr in target.aggrs">
+			<span dalmatinerdb-func-editor class="tight-form-item tight-form-func"></span>
+		</li>
+		<li class="dropdown" ng-if='target.bucket && target.metric'>
+			<span dalmatiner-add-func></span>
+		</li>
+		<li>
+	        <input type="text"
+	               class="tight-form-input"
+	               ng-model="target.alias"
+	               spellcheck='false'
+	               placeholder="alias"
+	               data-min-length=0
+	               ng-blur="get_data()">
+      	</li>
+	</ul>
+	<div class="clearfix"></div>
+</div>
