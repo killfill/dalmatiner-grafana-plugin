@@ -10,6 +10,8 @@ function (angular, _) {
 
   module.controller('DalmatinerQueryCtrl', function($scope, $timeout, $sce, templateSrv, $q, uiSegmentSrv) {
 
+    var metrics;
+
     $scope.init = function() {
       if (!$scope.target) { return; }
 
@@ -18,17 +20,22 @@ function (angular, _) {
       target.mget = target.mget || 'sum';
       target.mget_enabled = target.mget_enabled || false;
 
+      $scope.oldMetric = $scope.target.metric;
+      $scope.$on('typeahead-updated', function() {
+        $timeout($scope.get_data);
+      });
+
       if (!target.bucket) {
         $scope.bucketSegment = uiSegmentSrv.newSelectMeasurement();
       } else {
         $scope.bucketSegment = uiSegmentSrv.newSegment(target.bucket);
       }
 
-      if (!target.metric) {
-        $scope.metricSegment = uiSegmentSrv.newSelectMeasurement();
-      } else {
-        $scope.metricSegment = uiSegmentSrv.newSegment(target.metric);
-      }
+      // if (!target.metric) {
+      //   $scope.metricSegment = uiSegmentSrv.newSelectMeasurement();
+      // } else {
+      //   $scope.metricSegment = uiSegmentSrv.newSegment(target.metric);
+      // }
 
       $scope.mgets = ['sum', 'avg']
       $scope.aggrs = [
@@ -98,18 +105,29 @@ function (angular, _) {
 
     $scope.bucketChanged = function() {
       $scope.target.bucket = $scope.bucketSegment.value;
+      metrics = null;
     };
 
+
+    //We could replace text input, this with something like graphite segments, and get rid of this kind of things
     $scope.metricChanged = function() {
-      $scope.target.metric = $scope.metricSegment.value;
-      $scope.target.mget_enabled = $scope.target.metric.indexOf('*') > -1;
-
-      $scope.get_data();
+      if ($scope.oldMetric !== $scope.target.metric) {
+        $scope.target.mget_enabled = $scope.target.metric.indexOf('*') > -1;
+        $scope.oldMetric = $scope.target.metric
+        return $scope.get_data();
+      }
     };
 
-    $scope.getMetrics = function() {
-      return $scope.datasource.listMetrics(this.target.bucket)
-        .then($scope.transformToSegments(false), $scope.handleQueryError);
+    $scope.getMetrics = function(q, cb) {
+      if (metrics) return metrics
+      if (q) return []
+
+      return $scope.datasource
+        .listMetrics($scope.target.bucket)
+        .then(function ok(res) {
+          metrics = res
+          return cb(res)
+        }, $scope.handleQueryError)
     };
 
     $scope.toggleQueryMode = function () {

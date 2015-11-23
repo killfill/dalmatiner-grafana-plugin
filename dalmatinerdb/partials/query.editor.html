@@ -61,7 +61,15 @@
 			<metric-segment segment="bucketSegment" get-options="getBuckets()" on-change="bucketChanged()"></metric-segment>
 		</li>
 		<li ng-if='target.bucket'>
-			<metric-segment segment="metricSegment" get-options="getMetrics()" on-change="metricChanged()" style='min-width: 350px;' class='metric-min-width'></metric-segment>
+			<input type="text"
+				class="tight-form-input"
+				ng-model="target.metric"
+				spellcheck='false'
+				bs-typeahead="getMetrics"
+				placeholder="metric name"
+				data-min-length=0 data-items=1000
+				style='min-width: 450px;'
+				ng-blur="metricChanged()">
 		</li>
 		<li class="dropdown" ng-repeat="aggr in target.aggrs">
 			<span aggr-editor class="tight-form-item tight-form-func"></span>
@@ -69,7 +77,7 @@
 		<li class="dropdown" ng-if='target.bucket && target.metric'>
 			<span aggr-add></span>
 		</li>
-		<li>
+		<li ng-if='target.bucket && target.metric'>
 	        <input type="text"
 	               class="tight-form-input"
 	               ng-model="target.alias"
