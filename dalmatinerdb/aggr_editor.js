@@ -8,9 +8,9 @@ define([
 
   angular
     .module('grafana.directives')
-    .directive('dalmatinerdbFuncEditor', function($compile) {
+    .directive('aggrEditor', function($compile) {
 
-      var funcSpanTemplate = '<a class="dropdown-toggle" gf-dropdown="functionMenu" ' +
+      var funcSpanTemplate = '<a class="dropdown-toggle" gf-dropdown="aggrMenu" ' +
           'data-toggle="dropdown">{{aggr.name}}</a><span>(</span>';
 
       var paramTemplate = '<input type="text" style="display:none"' +
@@ -21,9 +21,9 @@ define([
         link: function postLink($scope, elem) {
           var $funcLink = $(funcSpanTemplate);
 
-          $scope.functionMenu = $scope.buildAggrMenu('changeAggr', $scope.aggr.id * 1)
+          $scope.aggrMenu = $scope.buildAggrMenu('changeAggr', $scope.aggr.id * 1)
 
-          $scope.functionMenu.unshift({
+          $scope.aggrMenu.unshift({
             text: "-- DELETE --",
             click: "deleteAggr('" + $scope.aggr.id + "');"
           });

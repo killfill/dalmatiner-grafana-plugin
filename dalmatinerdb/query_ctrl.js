@@ -15,6 +15,8 @@ function (angular, _) {
 
       var target = $scope.target;
       target.aggrs = target.aggrs || [];
+      target.mget = target.mget || 'sum';
+      target.mget_enabled = target.mget_enabled || false;
 
       if (!target.bucket) {
         $scope.bucketSegment = uiSegmentSrv.newSelectMeasurement();
@@ -28,6 +30,7 @@ function (angular, _) {
         $scope.metricSegment = uiSegmentSrv.newSegment(target.metric);
       }
 
+      $scope.mgets = ['sum', 'avg']
       $scope.aggrs = [
         {
           name: 'avg',
@@ -99,6 +102,8 @@ function (angular, _) {
 
     $scope.metricChanged = function() {
       $scope.target.metric = $scope.metricSegment.value;
+      $scope.target.mget_enabled = $scope.target.metric.indexOf('*') > -1;
+
       $scope.get_data();
     };
 
@@ -117,6 +122,11 @@ function (angular, _) {
         .then($scope.transformToSegments(false), $scope.handleQueryError);
     };
 
+    $scope.mgetChanged = function(value) {
+      $scope.target.mget = value;
+      $scope.get_data();
+    }
+
     $scope.buildAggrMenu = function(functionName, idx) {
       //We could have submenus here with submenu:[]
       //Click should not contain "s
@@ -130,6 +140,16 @@ function (angular, _) {
             text: aggr.name,
             click: functionName + "(" + funArgs + ")"
           }
+      })
+    }
+
+    $scope.buildMgetMenu = function() {
+
+      return $scope.mgets.map(function(mget) {
+        return {
+          text: mget,
+          click: "mgetChanged('" + mget + "')"
+        }
       })
     }
 

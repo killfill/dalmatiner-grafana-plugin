@@ -64,10 +64,10 @@
 			<metric-segment segment="metricSegment" get-options="getMetrics()" on-change="metricChanged()" style='min-width: 350px;' class='metric-min-width'></metric-segment>
 		</li>
 		<li class="dropdown" ng-repeat="aggr in target.aggrs">
-			<span dalmatinerdb-func-editor class="tight-form-item tight-form-func"></span>
+			<span aggr-editor class="tight-form-item tight-form-func"></span>
 		</li>
 		<li class="dropdown" ng-if='target.bucket && target.metric'>
-			<span dalmatiner-add-func></span>
+			<span aggr-add></span>
 		</li>
 		<li>
 	        <input type="text"
@@ -78,6 +78,11 @@
 	               data-min-length=0
 	               ng-blur="get_data()">
       	</li>
+
+		<li class="dropdown" ng-if='target.mget_enabled'>
+			<i class="tight-form-item query-keyword fa fa-asterisk" style='border-right: 0px;' title='Multi get operator'></i>
+			<span mget-editor></span>
+		</li>
 	</ul>
 	<div class="clearfix"></div>
 </div>

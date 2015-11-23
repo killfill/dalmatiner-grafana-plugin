@@ -6,8 +6,9 @@ define([
   './query_builder',
   './directives',
   './query_ctrl',
-  './dalmatiner_add_func',
-  './dalmatiner_edit_func',
+  './aggr_add',
+  './aggr_editor',
+  './mget_editor',
 ],
 function (angular, _, dateMath, DalmatinerSeries, DalmatinerQueryBuilder, $q) {
   'use strict';
@@ -88,13 +89,9 @@ function (angular, _, dateMath, DalmatinerSeries, DalmatinerQueryBuilder, $q) {
         return result.data;
 
       }, function error(err) {
-          if (err.data && err.data.error)
-            throw {message: 'DalmatinerDB Error Response: ' + err.data.error, data: err.data, config: err.config };
-          else
-            throw {message: 'DalmatinerDB Error: ' + err.message, data: err.data, config: err.config };
+          throw {message: 'Error: ' + (err.message || err.data || err.statusText), data: err.data, config: err.config };
       });
     };
-
 
     function isNumber(x) {
       return !isNaN(x)

@@ -25,7 +25,7 @@ function (_) {
       throw "Metric is missing";
 
     var src = q.metric + " BUCKET " + q.bucket;
-    if (q.mget && q.mget !== 'none') {
+    if (q.mget_enabled && q.mget && q.mget !== 'none') {
       src = q.mget + "(" + src + ")";
     }
     if (q.aggrs) {

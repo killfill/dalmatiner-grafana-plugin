@@ -7,7 +7,7 @@ define([
 
   angular
     .module('grafana.directives')
-    .directive('dalmatinerAddFunc', function($compile) {
+    .directive('aggrAdd', function($compile) {
 
       var buttonTemplate = '<a  class="tight-form-item tight-form-func dropdown-toggle"' +
                               ' tabindex="1" gf-dropdown="aggrMenu" data-toggle="dropdown">' +
