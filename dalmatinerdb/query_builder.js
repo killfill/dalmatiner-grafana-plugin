@@ -1,7 +1,7 @@
 define([
   'lodash'
 ],
-function (_) {
+function () {
   'use strict';
 
   function DalmatinerQueryBuilder(target) {
@@ -15,14 +15,16 @@ function (_) {
   };
 
   p._buildQuery = function() {
-    
+
     var q = this.target;
 
-    if (!q.bucket)
+    if (!q.bucket) {
       throw "Bucket is missing";
+    }
 
-    if (!q.metric)
+    if (!q.metric) {
       throw "Metric is missing";
+    }
 
     var src = q.metric + " BUCKET " + q.bucket;
     if (q.mget_enabled && q.mget && q.mget !== 'none') {
@@ -45,7 +47,7 @@ function (_) {
     //For switching to raw query
     this.target.query = src;
     return src;
-  }
+  };
 
   p._modifyRawQuery = function () {
     var query = this.target.query.replace(";", "");

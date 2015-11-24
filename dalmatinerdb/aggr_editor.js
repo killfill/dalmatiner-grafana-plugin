@@ -1,4 +1,3 @@
-var x;
 define([
   'angular',
   'lodash',
@@ -21,7 +20,7 @@ define([
         link: function postLink($scope, elem) {
           var $funcLink = $(funcSpanTemplate);
 
-          $scope.aggrMenu = $scope.buildAggrMenu('changeAggr', $scope.aggr.id * 1)
+          $scope.aggrMenu = $scope.buildAggrMenu('changeAggr', $scope.aggr.id * 1);
 
           $scope.aggrMenu.unshift({
             text: "-- DELETE --",
@@ -83,9 +82,9 @@ define([
               $link.appendTo(elem);
               $input.appendTo(elem);
               (function(idx) {
-                $input.blur(function() {inputBlur(idx, this)});
-                $link.click(function() {clickFuncParam(idx, this)});
-                $input.keypress(function(e) {inputKeyPress(idx, $link, $input, e)});
+                $input.blur(function() {inputBlur(idx, this);});
+                $link.click(function() {clickFuncParam(idx, this);});
+                $input.keypress(function(e) {inputKeyPress(idx, $link, $input, e);});
 
               })(i);
               $input.keyup(inputKeyDown);

@@ -10,7 +10,7 @@ define([
   './aggr_editor',
   './mget_editor',
 ],
-function (angular, _, dateMath, DalmatinerSeries, DalmatinerQueryBuilder, $q) {
+function (angular, _, dateMath, DalmatinerSeries, DalmatinerQueryBuilder) {
   'use strict';
 
   var module = angular.module('grafana.services');
@@ -33,24 +33,25 @@ function (angular, _, dateMath, DalmatinerSeries, DalmatinerQueryBuilder, $q) {
     DalmatinerDatasource.prototype.query = function(options) {
 
       var queries = options.targets
-        .filter(function hiddens(target) {return !target.hide})
+        .filter(function hiddens(target) {return !target.hide;})
         .map(function buildQuery(target) {
           var queryBuilder = new DalmatinerQueryBuilder(target);
           return queryBuilder.build().replace(/\$interval/g, (target.interval || options.interval));
         })
-        .join(', ')
+        .join(', ');
 
       //No query => return no data (inside a promise)
-      if (!queries)
-        return $q(function(resolve, reject) {resolve([])})
+      if (!queries) {
+        return $q(function(resolve) {resolve([]);});
+      }
 
       var mainQuery = 'SELECT ' + templateSrv.replace(queries, options.scopedVars) + ' ' + getTimeFilter(options);
 
       // console.log('Q:', mainQuery);
 
       return this.dalmatinerQuery(mainQuery).then(function(res) {
-        return {data: new DalmatinerSeries(res.s, res.d).getTimeSeries()}
-      })
+        return {data: new DalmatinerSeries(res.s, res.d).getTimeSeries()};
+      });
     };
 
     DalmatinerDatasource.prototype.dalmatinerQuery = function(query) {
@@ -58,12 +59,12 @@ function (angular, _, dateMath, DalmatinerSeries, DalmatinerQueryBuilder, $q) {
     };
 
     DalmatinerDatasource.prototype.listBuckets = function() {
-      return this._dalmatinerRequest('GET', '/buckets')
-    }
+      return this._dalmatinerRequest('GET', '/buckets');
+    };
 
     DalmatinerDatasource.prototype.listMetrics = function(bucket) {
-      return this._dalmatinerRequest('GET', '/buckets/' + bucket)
-    }
+      return this._dalmatinerRequest('GET', '/buckets/' + bucket);
+    };
 
     DalmatinerDatasource.prototype.testDatasource = function() {
       return this.listBuckets().then(function () {
@@ -82,19 +83,20 @@ function (angular, _, dateMath, DalmatinerSeries, DalmatinerQueryBuilder, $q) {
         params: params,
       };
 
-      if (this.basicAuth)
-        options.headers = {Authorization: this.basicAuth}
+      if (this.basicAuth) {
+        options.headers = {Authorization: this.basicAuth};
+      }
 
       return backendSrv.datasourceRequest(options).then(function ok(result) {
         return result.data;
 
       }, function error(err) {
-          throw {message: 'Error: ' + (err.message || err.data || err.statusText), data: err.data, config: err.config };
+        throw {message: 'Error: ' + (err.message || err.data || err.statusText), data: err.data, config: err.config };
       });
     };
 
     function isNumber(x) {
-      return !isNaN(x)
+      return !isNaN(x);
     }
 
     function getTimeFilter(options) {

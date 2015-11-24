@@ -37,7 +37,7 @@ function (angular, _) {
       //   $scope.metricSegment = uiSegmentSrv.newSegment(target.metric);
       // }
 
-      $scope.mgets = ['sum', 'avg']
+      $scope.mgets = ['sum', 'avg'];
       $scope.aggrs = [
         {
           name: 'avg',
@@ -75,7 +75,7 @@ function (angular, _) {
     };
 
     $scope.addAggr = function(aggr) {
-      aggr.id = Math.ceil(Math.random() * 10000000000)
+      aggr.id = Math.ceil(Math.random() * 10000000000);
       $scope.target.aggrs.push(aggr);
       $scope.get_data();
     };
@@ -83,51 +83,40 @@ function (angular, _) {
     $scope.changeAggr = function(newAggr, currentAggrId) {
 
       //Get the index of the aggr we want to change
-      var idx = $scope.target.aggrs.reduce(function(prev, aggr, idx) { 
-        return aggr.id == currentAggrId ? idx : prev
-      }, 0)
+      var idx = $scope.target.aggrs.reduce(function(prev, aggr, idx) {
+        return aggr.id === currentAggrId ? idx : prev;
+      }, 0);
 
-      var old = $scope.target.aggrs[idx]
-      newAggr.id = old.id
+      var old = $scope.target.aggrs[idx];
+      newAggr.id = old.id;
 
-      if (!old.vals || old.vals.length != newAggr.vals.length)
-        $scope.target.aggrs[idx] = newAggr
-      else
-        $scope.target.aggrs[idx].name = newAggr.name
+      if (!old.vals || old.vals.length !== newAggr.vals.length) {
+        $scope.target.aggrs[idx] = newAggr;
+      }
+      else {
+        $scope.target.aggrs[idx].name = newAggr.name;
+      }
 
       $scope.$parent.get_data();
     };
 
     $scope.deleteAggr = function(id) {
-      $scope.target.aggrs = $scope.target.aggrs.filter(function(a) {return a.id != id})
+      $scope.target.aggrs = $scope.target.aggrs.filter(function(a) {return a.id !== id;});
       $scope.$parent.get_data();
-    }
+    };
 
     $scope.bucketChanged = function() {
       $scope.target.bucket = $scope.bucketSegment.value;
       metrics = null;
     };
 
-
     //We could replace text input, this with something like graphite segments, and get rid of this kind of things
     $scope.metricChanged = function() {
       if ($scope.oldMetric !== $scope.target.metric) {
         $scope.target.mget_enabled = $scope.target.metric.indexOf('*') > -1;
-        $scope.oldMetric = $scope.target.metric
+        $scope.oldMetric = $scope.target.metric;
         return $scope.get_data();
       }
-    };
-
-    $scope.getMetrics = function(q, cb) {
-      if (metrics) return metrics
-      if (q) return []
-
-      return $scope.datasource
-        .listMetrics($scope.target.bucket)
-        .then(function ok(res) {
-          metrics = res
-          return cb(res)
-        }, $scope.handleQueryError)
     };
 
     $scope.toggleQueryMode = function () {
@@ -143,23 +132,25 @@ function (angular, _) {
     $scope.mgetChanged = function(value) {
       $scope.target.mget = value;
       $scope.get_data();
-    }
+    };
 
     $scope.buildAggrMenu = function(functionName, idx) {
       //We could have submenus here with submenu:[]
       //Click should not contain "s
-      
+
       return $scope.aggrs.map(function(aggr) {
 
-          var funArgs = JSON.stringify(aggr).replace(/"/g, "'")
-          if (idx) funArgs += ', ' + idx
+        var funArgs = JSON.stringify(aggr).replace(/"/g, "'");
+        if (idx) {
+          funArgs += ', ' + idx;
+        }
 
-          return {
-            text: aggr.name,
-            click: functionName + "(" + funArgs + ")"
-          }
-      })
-    }
+        return {
+          text: aggr.name,
+          click: functionName + "(" + funArgs + ")"
+        };
+      });
+    };
 
     $scope.buildMgetMenu = function() {
 
@@ -167,9 +158,9 @@ function (angular, _) {
         return {
           text: mget,
           click: "mgetChanged('" + mget + "')"
-        }
-      })
-    }
+        };
+      });
+    };
 
     $scope.handleQueryError = function(err) {
       $scope.parserError = err.message || 'Failed to issue metric query';
