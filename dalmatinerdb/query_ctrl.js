@@ -119,6 +119,24 @@ function (angular, _) {
       }
     };
 
+    $scope.getMetrics = function(q, cb) {
+
+      if (metrics) {
+        return metrics;
+      }
+
+      if (q) {
+        return [];
+      }
+
+      return $scope.datasource
+        .listMetrics($scope.target.bucket)
+        .then(function ok(res) {
+          metrics = res;
+          return cb(res);
+        }, $scope.handleQueryError);
+    };
+
     $scope.toggleQueryMode = function () {
       $scope.target.rawQuery = !$scope.target.rawQuery;
       $scope.get_data();
