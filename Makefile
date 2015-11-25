@@ -4,8 +4,7 @@ COMPONENT=fifo-grafana
 ROOT=$(GOPATH)/src/github.com/grafana/grafana
 
 all: export GOPATH=/root/GO
-#all: deps download backend frontend package
-all: package
+all: deps download backend frontend package
 
 deps:
 	pkgin -y in go-1.4 git-base build-essential-1.1 nodejs
