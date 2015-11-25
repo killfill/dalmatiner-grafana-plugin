@@ -15,7 +15,13 @@
             <service_fmri value="svc:/system/filesystem/local"/>
         </dependency>
 
-        <exec_method type="method" name="start" exec="/opt/local/fifo-grafana/bin/grafana -config=%{root_dir}/conf/custom.ini -homepath=%{root_dir}" timeout_seconds="60"/>
+        <exec_method type="method" name="start" exec="/opt/local/fifo-grafana/bin/grafana -config=%{root_dir}/conf/custom.ini -homepath=%{root_dir}" timeout_seconds="60">
+            <method_context>
+                <method_environment>
+                    <envvar name='HOME' value='/root'/>
+                </method_environment>
+            </method_context>
+        </exec_method>
         <exec_method type="method" name="stop" exec=":kill" timeout_seconds="60"/>
 
         <property_group name="startd" type="framework">
