@@ -1,11 +1,11 @@
 VERSION=2.5.0
 PLUGIN_DIR=~/dalmatiner-grafana-plugin
 COMPONENT=fifo-grafana
-PWD=$(pwd)
-GOPATH=$(PWD)/GO
+BUILD_ROOT=/tmp
+GOPATH=$(BUILD_ROOT)/GO
 ROOT=$(GOPATH)/src/github.com/grafana/grafana
 
-all: export GOPATH=$(PWD)/GO
+all: export GOPATH=$(BUILD_ROOT)/GO
 all: deps download backend frontend package
 
 deps:
