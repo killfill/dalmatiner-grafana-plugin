@@ -6,7 +6,7 @@ GOPATH=$(BUILD_ROOT)/GO
 ROOT=$(GOPATH)/src/github.com/grafana/grafana
 
 all: export GOPATH=$(BUILD_ROOT)/GO
-all: deps download backend frontend package
+all: package
 
 deps:
 	pkgin -y in go-1.4 git-base build-essential-1.1 nodejs
@@ -27,10 +27,9 @@ frontend:
 		(test -e public/app/plugins/datasource/dalmatinerdb || ln -s $(PLUGIN_DIR)/dalmatinerdb public/app/plugins/datasource/dalmatinerdb) && \
 		node_modules/grunt-cli/bin/grunt build build-post-process --force
 
-package:
+package: deps download backend frontend
 	mkdir -p $(ROOT)/tmp/bin
 	cp $(ROOT)/grafana $(ROOT)/tmp/bin/
 	cp custom.ini $(ROOT)/tmp/conf/custom.ini.example
 	cp manifest.xml $(ROOT)/tmp/
 	make -C rel/pkg package VERSION=$(VERSION) ROOT=$(ROOT)/tmp
-
