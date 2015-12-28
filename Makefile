@@ -1,7 +1,7 @@
 VERSION=2.5.0
 PLUGIN_DIR=~/dalmatiner-grafana-plugin
 COMPONENT=fifo-grafana
-BUILD_ROOT=.
+BUILD_ROOT=/tmp
 export GOPATH=$(BUILD_ROOT)/GO
 ROOT=$(GOPATH)/src/github.com/grafana/grafana
 
