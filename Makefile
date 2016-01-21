@@ -12,7 +12,8 @@ deps:
 	pkgin -y in go-1.4 git-base build-essential-1.1 nodejs
 
 download:
-	-test -d $(ROOT) || go get github.com/grafana/grafana
+	-rm -r $(ROOT)
+	go get github.com/grafana/grafana
 	cd $(ROOT); git fetch; git checkout v$(VERSION)
 
 backend:
