@@ -9,7 +9,7 @@ all: export GOPATH=$(BUILD_ROOT)/GO
 all: package
 
 deps:
-	pkgin -y in go-1.4 git-base build-essential-1.1 nodejs
+	pkgin -y in go git-base build-essential nodejs
 
 download:
 	-rm -r $(ROOT)
@@ -24,7 +24,7 @@ backend:
 		
 frontend:
 	cd $(ROOT) && \
-		npm install && \
+		npm install --force && \
 		(test -e public/app/plugins/datasource/dalmatinerdb || ln -s $(PLUGIN_DIR)/dalmatinerdb public/app/plugins/datasource/dalmatinerdb) && \
 		node_modules/grunt-cli/bin/grunt build build-post-process --force
 
